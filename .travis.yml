@@ -16,7 +16,8 @@ install:
 
 script:
 - find . -type f -name "*.go" | xargs sed 's|github.com/terraform-providers/terraform-provider-azurerm|github.com/criteo-forks/terraform-provider-azurerm|' -i
-- gofmt -s -w .
+- make fmt
+- gofmt -s -w main.go
 - make lint
 - make test
 - make vendor-status
