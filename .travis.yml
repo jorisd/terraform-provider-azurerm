@@ -15,6 +15,7 @@ install:
 - make tools
 
 script:
+- find . -type f -name "*.go" | xargs sed 's|github.com/terraform-providers/terraform-provider-azurerm|github.com/criteo-forks/terraform-provider-azurerm|' -i
 - make lint
 - make test
 - make vendor-status
@@ -23,6 +24,8 @@ script:
 branches:
   only:
   - master
+  - criteo
+
 matrix:
   fast_finish: true
   allow_failures:
