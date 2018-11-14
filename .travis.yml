@@ -15,14 +15,26 @@ install:
 - go get github.com/kardianos/govendor
 
 script:
-- make test
-- make vendor-status
-- make vet
-- make website-test
+- find . -type f -name "*.go" | xargs sed 's|github.com/terraform-providers/terraform-provider-azurerm|github.com/criteo-forks/terraform-provider-azurerm|' -i
+- export VERSION=$(echo $TRAVIS_TAG | sed 's/^v//')
+- make fmt
+- gofmt -s -w main.go
+- multiarch -j 3 multiarch
 
-branches:
-  only:
-  - master
+
+before_deploy:
+  - echo "Deploying $VERSION to GitHub releases"
+  - for d  in $(find ./pkg/bin -maxdepth 1 -mindepth 1 -type d | cut -d '/' -f4); do zip -j terraform-provider-azurerm_${VERSION}_${d}.zip ./pkg/bin/${d}/terraform-provider-azurerm* ; done
+
+deploy:
+  provider: releases
+  file_glob: true
+  file: terraform-provider-azurerm_*.zip
+  skip_cleanup: true
+  on:
+    repo: criteo-forks/terraform-provider-azurerm
+    tags: true
+
 matrix:
   fast_finish: true
   allow_failures:
