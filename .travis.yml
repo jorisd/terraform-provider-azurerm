@@ -19,7 +19,7 @@ script:
 - export VERSION=$(echo $TRAVIS_TAG | sed 's/^v//')
 - make fmt
 - gofmt -s -w main.go
-- multiarch -j 3 multiarch
+- make -j 3 multiarch
 
 
 before_deploy:
