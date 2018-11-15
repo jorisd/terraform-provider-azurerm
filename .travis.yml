@@ -18,7 +18,7 @@ script:
 before_deploy:
 - echo "Deploying $VERSION to GitHub releases"
 - for d  in $(find ./pkg/bin -maxdepth 1 -mindepth 1 -type d | cut -d '/' -f4); do
-  zip -j terraform-provider-azurerm_${VERSION}_${d}.zip ./pkg/bin/${d}/terraform-provider-azurerm*
+  tar czf terraform-provider-azurerm-${VERSION}.${d}.tar.gz -C ./pkg/bin/${d} .
   ; done
 matrix:
   fast_finish: true
